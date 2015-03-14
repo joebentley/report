@@ -1,0 +1,112 @@
+\documentclass[11pt]{amsart}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{amsmath,amsfonts,amsthm,amssymb, amsaddr}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{multicol}
+
+
+\graphicspath{ {./images/} }
+
+%\makeatletter
+%\def\subsection{\@startsection{subsection}{3}%
+%  \z@{.5\linespacing\@plus.7\linespacing}{.1\linespacing}%
+%  {\normalfont\itshape}}
+%\makeatother
+
+\title{Lab Report}
+
+\author{Joe Bentley}
+
+\address{School of Physics and Astronomy \\ Tutor: Kevin Ralley}
+\email{joebentley10@gmail.com}
+
+\date{\today}
+
+\begin{document}
+
+\begin{abstract}
+  In this paper the higgs data is analysed and we find the higgs with this statistical significance etc.
+\end{abstract}
+
+\maketitle
+
+\newpage
+
+\pagestyle{fancyplain}
+
+\lhead{\footnotesize {Joe Bentley}}
+\rhead{\footnotesize {Lab Report}}
+
+\begin{multicols}{2}
+
+\section{Theory}
+
+\subsection{Higgs Decay Channels}
+
+The decay channel observed is the decay to a pair of photons through a top quark loop or W boson loop. This is significantly rarer than the other decay modes, but is used because the momenta of the photons can be measured much more accurately than other more massive particles, since the momenta of the photon is directly proportional to its energy, as the photon has no rest mass. (GET SOURCE)
+
+The invariant mass is calculated using the relativistic equation for energy, in natural using this is given by,
+
+\begin{align*}
+  m_0^2 = E^2 - {|\mathbf{p}|}^2
+\end{align*}
+
+This is calculated in the parsing program by summing the four momenta from the event and then taking the scalar product of the resulting vector with itself. In Minkowski space-time has signature $(+, -, -, -)$ so this has the effect of the above equation. We then take the square root of the scalar product to find the invariant mass.
+
+\section{Weighting}
+
+The data given included $10,000$ signal events and $1,000,000$ background events. This is a much smaller ratio of signal to background events than would actually be observed in a real collider experiment, due to the low branching factor of the $H \to \gamma\gamma$. The theoretical ratio of the observed Higgs events to observed background events can be calculated by taking the ratio of the Higgs production cross section to the background cross section and multiplying it by the branching factor of $H \to \gamma\gamma$,
+
+\begin{equation}
+  \label{eq:weighting}
+  \frac{\text{num. H}}{\text{num. back}} = \frac{\sigma{\left(\text{H produced}\right)} \times B_f\left(H\to\gamma\gamma\right)}{\sigma{\left(\text{back}\right)}}
+\end{equation}
+
+WHAT ARE THE NUMBERS? GIVE SOURCES FOR THEM
+
+
+\section{Filters}
+
+There are many more invariant masses from the background events than there are from the signal (Higgs) events. In fact after the weighting, there are roughly $100$ Higgs events to $100,000,000$ background events, so in the combined invariant mass histogram, with no filtering, the Higgs is practically invisible. Thus filtering is applied in the form of event selection to remove events which are clearly not Higgs events. There are a few kinds of filtering EXPLAIN THEM.
+
+\subsection{Transverse Momenta Filtering}
+
+The transverse momentum is the component of momentum perpendicular to the beam axis. (WHAT DO WE EXPECT?)
+
+\subsection{Energy}
+
+(Filter the energy, not sure if we will see results)
+
+\subsection{Angular}
+
+(Filter the difference in azimuthal angle and pseudorapidity squared)
+
+
+\section{Optimisation of Filters}
+
+To find the filter parameters that give the best chance of finding the Higgs we used the formula for the statistical significance of the higgs,
+
+\begin{equation}
+  \label{eq:significance}
+  \Sigma = \frac{\text{no. signal}}{\sqrt{\text{no. signal} + \text{no. background}}}
+\end{equation}
+
+Each filter is applied to the signal (Higgs) and background events and then the above equation is used to find the statistical significance of the Higgs in those events by counting the number of signal and background events left after filtering. To find the best parameters to use for the filters a range of different parameters are tested, for example for the transverse momenta parameters are applied from $\SI{0}{\giga\electronvolt}$ to $\SI{700}{\giga\electronvolt}$ in steps of $\SI{100}{\giga\electronvolt}$, the value that gives the best statistical significance is then chosen as the current candidate for the best optimised value. Then the value is further optimised by taking the currently best optimised value and then checking the values around it, for example checking the value $\pm 10$ the current value. After checking a few times (HOW MANY TIMES?) the most optimum filter values to see the most Higgs event in the invariant mass histogram are attained.
+
+INCLUDE SIGNIFICANCE PLOT!!!
+
+
+\section{Invariant Mass Histogram}
+
+The numpy library is used to generate an combined (signal and background) invariant mass histogram from the invariant masses calculated in the parsing script. The statistical significance of the signal (Higgs) is calculated using eq.~\ref{eq:significance} taken over a certain mass window (WHAT MASS WINDOW?!?), and gives a measure of how sure we can be that it is the Higgs in this mass range.
+
+INCLUDE INVARIANT MASS PLOT HERE
+
+\end{multicols}
+
+\bibliographystyle{plain}
+\bibliography{citations}
+\end{document}
