@@ -54,6 +54,10 @@ The four momentum is similar to the classical three component momentum except ge
 
 The decay channel investigated in this experiment was the decay to a pair of photons through a top quark loop or W boson loop. This is significantly rarer than the other decay modes, but is used because the momenta of the photons can be measured much more accurately than other more massive particles, since the momenta of the photon is directly proportional to its energy, as the photon has no rest mass. (GET SOURCE)
 
+\subsection{Invariant Mass}
+
+To find the mass of the particle(s) before a collision event, the invariant mass is used, which is the mass which remains unchanged through a Lorentz transform (GET SOURCE). The invariant mass of the products of an interaction are the same as the invariant mass of the input (???) particles, so by calculating the invariant masses of the resultant particles of the collision events, we can calculated a series of invariant mass values. Since the Higgs invariant mass is known (ROUGHLY?!?), the frequency of values in that window should be higher.
+
 The invariant mass is calculated using the relativistic equation for energy, in natural units this is given by,
 
 \begin{equation}
@@ -61,7 +65,7 @@ The invariant mass is calculated using the relativistic equation for energy, in 
   m_0^2 = E^2 - {|\mathbf{p}|}^2
 \end{equation}
 
-This is calculated in the parsing program by summing the four momenta from the event and then taking the scalar product of the resulting vector with itself. In Minkowski space-time has signature $(+, -, -, -)$ so this has the effect of the above equation. We then take the square root of the scalar product to find the invariant mass.
+This is calculated in the parsing program by summing the four momenta from the event and then taking the scalar product of the resulting vector with itself. Minkowski space-time has signature $(+, -, -, -)$ so the scalar product has the effect of the above equation. We then take the square root of the scalar product to find the invariant mass.
 
 \section{PYTHIA}
 
@@ -69,16 +73,16 @@ The GPL-licensed PYTHIA was used to generate the collision data used in this exp
 
 \section{Weighting}
 
-The data given included $10,000$ signal events and $1,000,000$ background events. This is a much smaller ratio of signal to background events than would actually be observed in a real collider experiment, due to the low branching factor of the $H \to \gamma\gamma$. The theoretical ratio of the observed Higgs events to observed background events can be calculated by taking the ratio of the Higgs production cross section to the background cross section and multiplying it by the branching factor of $H \to \gamma\gamma$,
+The data given included $10,000$ signal events and $1,000,000$ background events. This is a much smaller ratio of signal to background events than would actually be observed in a real collider experiment, due to the low branching fraction of the $H \to \gamma\gamma$. The branching fraction is the fraction of all particles which decay through a given decay mode, in this case the fraction of $H \to \gamma\gamma$ decays  over all Higgs decay modes. The theoretical ratio of the observed Higgs events to observed background events can be calculated by taking the ratio of the Higgs production cross section to the background cross section and multiplying it by the branching fraction of $H \to \gamma\gamma$,
 
 \begin{equation}
   \label{eq:weighting}
   \frac{\text{num. H}}{\text{num. back}} = \frac{\sigma{\left(\text{H prod}\right)} \cdot B_f\left(H\to\gamma\gamma\right)}{\sigma{\left(\text{back}\right)}}
 \end{equation}
 
-where $\text{num. H}$ is the number of signal events, $\text{num. back}$ is the number of background events, $\sigma{\left(\text{H prod}\right)}$ is the Higgs production cross section, $\sigma{\left(\text{back}\right)}$ is the background cross section, and $B_f\left(H\to\gamma\gamma\right)$ is the branching factor of Higgs to diphoton.
+where $\text{num. H}$ is the number of signal events, $\text{num. back}$ is the number of background events, $\sigma{\left(\text{H prod}\right)}$ is the Higgs production cross section, $\sigma{\left(\text{back}\right)}$ is the background cross section, and $B_f\left(H\to\gamma\gamma\right)$ is the branching fraction of Higgs to diphoton.
 
-EXPLAIN BRANCHING FACTOR. WHAT ARE THE NUMBERS? GIVE SOURCES FOR THEM
+The branching fraction is given by $B_f\left(H\to\gamma\gamma\right) = 0.00228$, and the cross sections are given by $\sigma{\left(\text{H prod}\right)} = \SI{17.35}{\pico\barn}$, and $\sigma{\left(\text{back}\right)} = \SI{140}{\pico\barn}$. GET SOURCES FOR THESE (AND JUSTIFICATION NEEDED).
 
 
 \section{Filters}
@@ -101,7 +105,7 @@ The transverse momenta is the component of the momentum perpendicular to the bea
 
 \subsection{Final Selection}
 
-Finally the two highest transverse momenta photons are chosen as the candidates to calculate the invariant mass from.
+Finally all but the two highest transverse momenta photons are discarded, and the two remaining are used to calculated the invariant mass.
 
 MENTION AZIMUTHAL SELECTION
 
@@ -115,7 +119,7 @@ To find the filter parameters that give the best chance of finding the Higgs we 
   \Sigma = \frac{\text{no. signal}}{\sqrt{\text{no. signal} + \text{no. background}}}
 \end{equation}
 
-Each filter is applied to the signal (Higgs) and background events and then the above equation is used to find the statistical significance of the Higgs in those events by counting the number of signal and background events left after filtering. To find the best parameters to use for the filters a range of different parameters are tested, for example for the transverse momenta parameters are applied from $\SI{0}{\giga\electronvolt}$ to $\SI{700}{\giga\electronvolt}$ in steps of $\SI{100}{\giga\electronvolt}$, the value that gives the best statistical significance is then chosen as the current candidate for the best optimised value. Then the value is further optimised by taking the currently best optimised value and then checking the values around it, for example checking the value $\pm 10$ the current value. After checking a few times (HOW MANY TIMES?) the most optimum filter values to see the most Higgs event in the invariant mass histogram are attained.
+Each filter is applied to the signal (Higgs) and background events and then the above equation is used to find the statistical significance of the Higgs in those events by counting the number of signal and background events left after filtering. To find the best parameters to use for the filters a range of different parameters are tested for each filter. For example for the transverse momenta filter, the threshold is originally applied from $\SI{0}{\giga\electronvolt}$ to $\SI{700}{\giga\electronvolt}$ in steps of $\SI{100}{\giga\electronvolt}$. The value that gives the best statistical significance is then chosen as the current candidate for the best optimised value. Then the value is further optimised by taking the currently best optimised value and then calculating the statistical significance for the values around it, for example checking the statistical significance at $\SI{\pm10}{\giga\electronvolt}$ the current value for the above example. After repeating this process a few times (HOW MANY TIMES?) the most optimum filter values to see the most Higgs event in the invariant mass histogram are found.
 
 INCLUDE SIGNIFICANCE PLOT!!!
 
