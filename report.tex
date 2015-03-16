@@ -54,15 +54,18 @@ The four momentum is similar to the classical three component momentum except ge
 
 The decay channel investigated in this experiment was the decay to a pair of photons through a top quark loop or W boson loop. This is significantly rarer than the other decay modes, but is used because the momenta of the photons can be measured much more accurately than other more massive particles, since the momenta of the photon is directly proportional to its energy, as the photon has no rest mass. (GET SOURCE)
 
-The invariant mass is calculated using the relativistic equation for energy, in natural using this is given by,
+The invariant mass is calculated using the relativistic equation for energy, in natural units this is given by,
 
-\begin{align*}
+\begin{equation}
+  \label{eq:invariantmass}
   m_0^2 = E^2 - {|\mathbf{p}|}^2
-\end{align*}
+\end{equation}
 
 This is calculated in the parsing program by summing the four momenta from the event and then taking the scalar product of the resulting vector with itself. In Minkowski space-time has signature $(+, -, -, -)$ so this has the effect of the above equation. We then take the square root of the scalar product to find the invariant mass.
 
 \section{PYTHIA}
+
+The GPL-licensed PYTHIA was used to generate the collision data used in this experiment. \cite{pythia}
 
 \section{Weighting}
 
@@ -70,10 +73,12 @@ The data given included $10,000$ signal events and $1,000,000$ background events
 
 \begin{equation}
   \label{eq:weighting}
-  \frac{\text{num. H}}{\text{num. back}} = \frac{\sigma{\left(\text{H produced}\right)} \times B_f\left(H\to\gamma\gamma\right)}{\sigma{\left(\text{back}\right)}}
+  \frac{\text{num. H}}{\text{num. back}} = \frac{\sigma{\left(\text{H prod}\right)} \cdot B_f\left(H\to\gamma\gamma\right)}{\sigma{\left(\text{back}\right)}}
 \end{equation}
 
-WHAT ARE THE NUMBERS? GIVE SOURCES FOR THEM
+where $\text{num. H}$ is the number of signal events, $\text{num. back}$ is the number of background events, $\sigma{\left(\text{H prod}\right)}$ is the Higgs production cross section, $\sigma{\left(\text{back}\right)}$ is the background cross section, and $B_f\left(H\to\gamma\gamma\right)$ is the branching factor of Higgs to diphoton.
+
+EXPLAIN BRANCHING FACTOR. WHAT ARE THE NUMBERS? GIVE SOURCES FOR THEM
 
 
 \section{Filters}
