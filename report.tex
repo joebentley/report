@@ -68,12 +68,29 @@ The invariant mass is calculated using the relativistic equation for energy, in 
 This is calculated in the parsing program by summing the four momenta from the event and then taking the scalar product of the resulting vector with itself. Minkowski space-time has signature $(+, -, -, -)$ so the scalar product has the effect of the above equation. We then take the square root of the scalar product to find the invariant mass.
 
 \section{PYTHIA}
+\label{sec:pythia}
 
-The GPL-licensed PYTHIA was used to generate the collision data used in this experiment. \cite{pythia}
+The GPL-licensed PYTHIA was used to generate the collision data used in this experiment. \cite{pythia} The event data is given in a flat text file format. The file consists of a series of events, which start with a header ``Event $n$'', the subsequent lines are the four momenta of the products of the collision event, then there is another line ``Event $n+1$'' with subsequent lines being four momenta events and so on.
+
+\section{Programming}
+
+The scripts used in this experiment were written in Python 3, and used the numpy (numeric Python) module for generating the histogram, and PyPlot (from matplotlib) for plotting the histogram and significance plots. Three different scripts are used in this experiment,
+
+\subsection{parse.py}
+
+The script parse.py parses the event data in the format described in section ~\ref{sec:pythia} into individual event objects which each contain a list of four momenta objects. In these event classes we have methods which do useful operations like calculating the invariant mass of the event using the four momenta. The four momenta class has methods that allow us to easily calculate the transverse momentum, azimuthal angle, etc. The parsing scripts also contains the filters which are used to filter out Higgs events from background events, and are discussed in more depth in section ~\ref{sec:filters}. The invariant masses are calculated for each event in the event data file and then each invariant mass is written to a line in the output invariant masses file.
+
+\subsection{significance.py}
+
+This scripts optimises the filters used on the Higgs and background data by using a series of parameters with the filters and testing them on the entire data set; the significance is taken for the parameters and this is used to find the best filter parameters, as discussed in section ~\ref{sec:optimisation}. This script parses and filters the data using the parsing module.
+
+\subsection{plot.py}
+
+The plotting script generates the histogram of both the higgs and background event data together, called the combined mass histogram. The significance in the mass range (WHAT MASS RANGE) is calculated by counting the number of Higgs events in the mass range and the number of background events in the mass range and then using eq.~\ref{eq:significance} to calculate the statistical significance. The script can also generate an invariant mass plot from the combined mass histogram.
 
 \section{Weighting}
 
-The data given included $10,000$ signal events and $1,000,000$ background events. This is a much smaller ratio of signal to background events than would actually be observed in a real collider experiment, due to the low branching fraction of the $H \to \gamma\gamma$. The branching fraction is the fraction of all particles which decay through a given decay mode, in this case the fraction of $H \to \gamma\gamma$ decays  over all Higgs decay modes. The theoretical ratio of the observed Higgs events to observed background events can be calculated by taking the ratio of the Higgs production cross section to the background cross section and multiplying it by the branching fraction of $H \to \gamma\gamma$,
+The data given included $10,000$ signal events and $1,000,000$ background events. This is a much smaller ratio of signal to background events than would actually be observed in a real collider experiment, due to the low branching fraction of the $H \to \gamma\gamma$. The branching fraction is the fraction of all particles which decay through a given decay mode, in this case the fraction of $H \to \gamma\gamma$ decays over all Higgs decay modes. The theoretical ratio of the observed Higgs events to observed background events can be calculated by taking the ratio of the Higgs production cross section to the background cross section and multiplying it by the branching fraction of $H \to \gamma\gamma$,
 
 \begin{equation}
   \label{eq:weighting}
@@ -82,12 +99,13 @@ The data given included $10,000$ signal events and $1,000,000$ background events
 
 where $\text{num. H}$ is the number of signal events, $\text{num. back}$ is the number of background events, $\sigma{\left(\text{H prod}\right)}$ is the Higgs production cross section, $\sigma{\left(\text{back}\right)}$ is the background cross section, and $B_f\left(H\to\gamma\gamma\right)$ is the branching fraction of Higgs to diphoton.
 
-The branching fraction is given by $B_f\left(H\to\gamma\gamma\right) = 0.00228$, and the cross sections are given by $\sigma{\left(\text{H prod}\right)} = \SI{17.35}{\pico\barn}$, and $\sigma{\left(\text{back}\right)} = \SI{140}{\pico\barn}$. GET SOURCES FOR THESE (AND JUSTIFICATION NEEDED).
+The branching fraction is given by $B_f\left(H\to\gamma\gamma\right) = 0.00225$, and the cross sections are given by $\sigma{\left(\text{H prod}\right)} = \SI{17.35}{\pico\barn}$, and $\sigma{\left(\text{back}\right)} = \SI{140}{\pico\barn}$. \cite{HiggsCross1} (JUSTIFICATION NEEDED).
 
 
 \section{Filters}
+\label{sec:filters}
 
-There are many more invariant masses from the background events than there are from the signal (Higgs) events. In fact after the weighting, there are roughly $100$ Higgs events to $100,000,000$ background events, so in the combined invariant mass histogram, with no filtering, the Higgs is practically invisible. Thus filtering is applied in the form of event selection to remove events which are clearly not Higgs events. There are a few kinds of filtering EXPLAIN THEM.
+There are many more invariant masses from the background events than there are from the signal (Higgs) events. In fact after the weighting, there are roughly $100$ Higgs events to $100,000,000$ background events, so in the combined invariant mass histogram the Higgs is practically invisible. Thus filtering needs to be applied for there to be any chance to be able to observe the Higgs in the invariant mass histogram. This is implemented in the form of event selection to remove events which are clearly not Higgs events. There are a few kinds of filtering EXPLAIN THEM.
 
 \subsection{Transverse Momenta Filtering}
 
@@ -111,6 +129,7 @@ MENTION AZIMUTHAL SELECTION
 
 
 \section{Optimisation of Filters}
+\label{sec:optimisation}
 
 To find the filter parameters that give the best chance of finding the Higgs we used the formula for the statistical significance of the higgs,
 
