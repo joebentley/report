@@ -49,7 +49,28 @@
 \subsection{Four Momentum}
 \label{sec:fourmomentum}
 
-The four momentum is similar to the classical three component momentum except generalised to four dimensional space-time, so it also has an energy component. \cite{kinematics} In the data supplied the four-momentum is given in the form $(p_x, p_y, p_z, E)$, where $p_z$ is aligned along the beam axis. The transverse momentum is the component of the momentum perpendicular to the beam axis. Since the $z$ component of the four-momentum, $p_z$ is aligned along the beam axis, the transverse momentum is given by $p_T = \sqrt{{p_x}^2 + {p_y}^2}$.
+The four momentum is similar to the classical three component momentum except generalised to four dimensional space-time, so it also has an energy component. \cite{kinematics} In the data supplied the four-momentum is given in the form $(p_x, p_y, p_z, E)$, where $p_z$ is aligned along the beam axis
+
+The transverse momentum is the component of the momentum perpendicular to the beam axis. Since the $z$ component of the four-momentum, $p_z$ is aligned along the beam axis, the transverse momentum is given by,
+
+\begin{equation}
+  \label{eq:transverse}
+  p_T = \sqrt{{p_x}^2 + {p_y}^2}
+\end{equation}
+
+The pseudorapidity is a measure of the angle between the particle and the beam axis, and is defined as $\eta = -\ln{\left[\tan{\left(\frac{\theta}{2}\right)}\right]}$. This can be calculated from the cartesian momentum components using, (RELATE THIS TO RAPIDITY)
+
+\begin{equation}
+  \label{eq:pseudorapidity}
+  \eta = \sinh^{-1} \frac{p_z}{p_T}
+\end{equation}
+
+The azimuthal angle is the angle subtended by the $x$ and $y$ momentum components, so the angle between the momentum components that are perpendicular to the beam axis, in contrast to the pseudorapidity, which is between the particle trajectory and the beam axis, (MAKE SENSE?) (DIAGRAM?)
+
+\begin{equation}
+  \label{eq:azimuthal}
+  \phi = \tan^{-1} \frac{p_y}{p_x}
+\end{equation}
 
 \subsection{Higgs Decay Channels}
 
@@ -94,7 +115,7 @@ The scripts used in this experiment were written in Python 3, and used the numpy
 
 \subsection{parse.py}
 
-The script parse.py parses the event data in the format described in section ~\ref{sec:pythia} into individual event objects which each contain a list of four momenta objects. In these event classes we have methods which do useful operations like calculating the invariant mass of the event using the four momenta. The four momenta class has methods that allow us to easily calculate the transverse momentum, azimuthal angle, etc. The parsing scripts also contains the filters which are used to filter out Higgs events from background events, and are discussed in more depth in section ~\ref{sec:filters}. The invariant masses are calculated for each event in the event data file and then each invariant mass is written to a line in the output invariant masses file.
+The script parse.py parses the event data in the format described in section ~\ref{sec:pythia} into individual event objects which each contain a list of four momenta objects. In these event classes we have methods which do useful operations like calculating the invariant mass of the event using the four momenta. The four momenta class has methods that allow us to easily calculate the transverse momentum, azimuthal angle, and pseudorapidity, as well as allowing us to add and take the dot product of four momenta. The parsing scripts also contains the filters which are used to filter out Higgs events from background events, and are discussed in more depth in section ~\ref{sec:filters}. The invariant masses are calculated for each event in the event data file and then each invariant mass is written to a line in the output invariant masses file.
 
 \subsection{significance.py}
 
@@ -173,6 +194,8 @@ The numpy library is used to generate an combined (signal and background) invari
 \end{Figure}
 
 (DISCUSS RESULTS!!!)
+
+\section{Results}
 
 \end{multicols}
 
