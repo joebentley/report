@@ -52,9 +52,10 @@ The four momentum is similar to the classical three component momentum except ge
 
 \subsection{Higgs Decay Channels}
 
-The decay channel investigated in this experiment was the decay to a pair of photons through a top quark loop or W boson loop. This is significantly rarer than the other decay modes, but is used because the momenta of the photons can be measured much more accurately than other more massive particles, since the momenta of the photon is directly proportional to its energy, as the photon has no rest mass. (GET SOURCE)
+The decay channel investigated in this experiment was the decay to a pair of photons through a top quark loop or W boson loop. This is significantly rarer than the other decay modes as shown by the small branching fraction \cite{HiggsCross1}, but is used because the momenta of the photons can be measured much more accurately than other more massive particles, since the momenta of the photon is directly proportional to its energy, as the photon has no rest mass. (GET SOURCE) (HOW TO MEASURE PARTICLE MOMENTUM? LOOK AT ATLAS EXPERIMENT)
 
 \subsection{Invariant Mass}
+\label{sec:invariant}
 
 To find the mass of the particle(s) before a collision event, the invariant mass is used, which is the mass which remains unchanged through a Lorentz transform (GET SOURCE). The invariant mass of the products of an interaction are the same as the invariant mass of the input (???) particles, so by calculating the invariant masses of the resultant particles of the collision events, we can calculated a series of invariant mass values. Since the Higgs invariant mass is known (ROUGHLY?!?), the frequency of values in that window should be higher.
 
@@ -66,6 +67,8 @@ The invariant mass is calculated using the relativistic equation for energy, in 
 \end{equation}
 
 This is calculated in the parsing program by summing the four momenta from the event and then taking the scalar product of the resulting vector with itself. Minkowski space-time has signature $(+, -, -, -)$ so the scalar product has the effect of the above equation. We then take the square root of the scalar product to find the invariant mass.
+
+The mass window is taken to be $\SI{110}{\giga\electronvolt}$ to $\SI{130}{\giga\electronvolt}$.
 
 \section{PYTHIA}
 \label{sec:pythia}
@@ -99,15 +102,19 @@ The data given included $10,000$ signal events and $1,000,000$ background events
 
 where $\text{num. H}$ is the number of signal events, $\text{num. back}$ is the number of background events, $\sigma{\left(\text{H prod}\right)}$ is the Higgs production cross section, $\sigma{\left(\text{back}\right)}$ is the background cross section, and $B_f\left(H\to\gamma\gamma\right)$ is the branching fraction of Higgs to diphoton.
 
-The branching fraction is given by $B_f\left(H\to\gamma\gamma\right) = 0.00225$, and the cross sections are given by $\sigma{\left(\text{H prod}\right)} = \SI{17.35}{\pico\barn}$, and $\sigma{\left(\text{back}\right)} = \SI{140}{\pico\barn}$. \cite{HiggsCross1} (JUSTIFICATION NEEDED).
+The branching fraction is given by $B_f\left(H\to\gamma\gamma\right) = 0.00225$, and the cross sections are given by $\sigma{\left(\text{H prod}\right)} = \SI{17.12}{\pico\barn}$, and $\sigma{\left(\text{back}\right)} = \SI{140}{\pico\barn}$. The Higgs cross section and branching fraction are taken in the midpoint of our mass window, $\SI{120}{\giga\electronvolt}$, where the cross section is taken from the ABPS calculation for $\sqrt{s} = \SI{14}{\tera\electronvolt}$ where $s$ is the center-of-momentum energy (the energy in the frame where the net momenta is zero). \cite{HiggsCross1} (MORE JUSTIFICATION NEEDED). The background cross section is taken from the PYTHIA collision event generator.
 
 
 \section{Filters}
 \label{sec:filters}
 
-There are many more invariant masses from the background events than there are from the signal (Higgs) events. In fact after the weighting, there are roughly $100$ Higgs events to $100,000,000$ background events, so in the combined invariant mass histogram the Higgs is practically invisible. Thus filtering needs to be applied for there to be any chance to be able to observe the Higgs in the invariant mass histogram. This is implemented in the form of event selection to remove events which are clearly not Higgs events. There are a few kinds of filtering EXPLAIN THEM.
+There are many more background events than there are from the signal (Higgs) events in our data. After the weighting, there are roughly $100$ Higgs events to $100,000,000$ background events, so in the combined invariant mass histogram the Higgs is practically invisible. Thus filtering needs to be applied for there to be any chance to be able to observe the Higgs in the invariant mass histogram. This is implemented in the form of event selection in which we attempt to remove the background data while retaining the Higgs data. A few types of filtering are used: number threshold, transverse momenta, energy, angular (azimuthal and pseudorapidity).
 
-\subsection{Transverse Momenta Filtering}
+\subsection{Number}
+
+The first filter applied a threshold to the number of four momenta in the collision event. It is required that the event must have at least two four momenta, as the $H \to \gamma\gamma$ will produce at least two photons, not just one.
+
+\subsection{Transverse Momenta}
 
 The transverse momenta is the component of the momentum perpendicular to the beam axis. Since the $z$ component of the four-momentum, $p_z$ is aligned along the beam axis, the transverse momentum is given by $p_T = \sqrt{{p_x}^2 + {p_y}^2}$. This is filtered in two passes over both the signal and higgs events. Given an event with four momenta, first the event is discarded unless it has at least one four momentum above a given threshold, then all four momenta in the event below a certain threshold are discarded.
 
@@ -123,9 +130,7 @@ The transverse momenta is the component of the momentum perpendicular to the bea
 
 \subsection{Final Selection}
 
-Finally all but the two highest transverse momenta photons are discarded, and the two remaining are used to calculated the invariant mass.
-
-MENTION AZIMUTHAL SELECTION
+There are two methods that were proposed to choose the final two transverse momenta to use to calculate the invariant mass. First it was decided to try an azimuthal angle based filter, where the most back-to-back photons (the photons with an azimuthal angle with the greatest difference) would be chosen to calculate the invariant mass. (WHY DIDN'T YOU DO THIS?!?) Instead all but the two highest transverse momenta photons are discarded, and the two remaining are used to calculated the invariant mass.
 
 
 \section{Optimisation of Filters}
@@ -145,7 +150,7 @@ INCLUDE SIGNIFICANCE PLOT!!!
 
 \section{Invariant Mass Histogram}
 
-The numpy library is used to generate an combined (signal and background) invariant mass histogram from the invariant masses calculated in the parsing script. The statistical significance of the signal (Higgs) is calculated using eq.~\ref{eq:significance} taken over a certain mass window (WHAT MASS WINDOW?!?), and gives a measure of how sure we can be that it is the Higgs in this mass range.
+The numpy library is used to generate an combined (signal and background) invariant mass histogram from the invariant masses calculated in the parsing script. The statistical significance of the signal (Higgs) is calculated using eq.~\ref{eq:significance} over the mass window discussed in section ~\ref{sec:invariant}, and gives a measure of how sure we can be that it is the Higgs in this mass range.
 
 \begin{Figure}
   \centering
@@ -153,6 +158,8 @@ The numpy library is used to generate an combined (signal and background) invari
   \captionof{figure}{Our awesome invariant mass plot yo!}
   \label{fig:invmass}
 \end{Figure}
+
+(DISCUSS RESULTS!!!)
 
 \end{multicols}
 
