@@ -19,7 +19,7 @@
 %  {\normalfont\itshape}}
 %\makeatother
 
-\title{Lab Report}
+\title{Observation of the Higgs Boson in the $H \to \gamma\gamma$ Channel from Data Simulated in Pythia}
 
 \author{Joe Bentley}
 
@@ -49,6 +49,12 @@
 
 In this experiment particle collision data is analysed using multiple Python scripts to generate an invariant mass histogram and attempt to find the Higgs boson with some statistical significance. (WHAT STATISTICAL SIGNIFICANCE) The data is generated in PYTHIA as a flat text file, which is parsed by our parsing script to filter the events and calculate the invariant masses.
 
+(TALK ABOUT INTEREST IN THIS EXPERIMENT:
+
+- WHY IS IT HARD?
+- WHY WOULD YOU WANT TO DO IT?
+- BRIEF OUTLINE OF METHOD)
+
 \section{Theory}
 
 \subsection{Four Momentum}
@@ -60,31 +66,49 @@ The transverse momentum is the component of the momentum perpendicular to the be
 
 \begin{equation}
   \label{eq:transverse}
-  p_T = \sqrt{{p_x}^2 + {p_y}^2}
+  p_T = \sqrt{{p_x}^2 + {p_y}^2}.
 \end{equation}
 
-The pseudorapidity is a measure of the angle between the particle and the beam axis, and is defined as $\eta = -\ln{\left[\tan{\left(\frac{\theta}{2}\right)}\right]}$. This can be calculated from the cartesian momentum components using, (RELATE THIS TO RAPIDITY)
+The pseudorapidity is a measure of the angle between the particle and the beam axis, and is defined as,
+
+\begin{equation}
+  \label{eq:pseudorapdity2}
+  \eta = -\ln{\left[\tan{\left(\frac{\theta}{2}\right)}\right]} = \frac{1}{2}\ln{\left(\frac{|\mathbf{p}|+p_z}{|\mathbf{p}|-p_z}\right)},
+\end{equation}
+
+\cite{kinematics}
+
+which can be calculated from the cartesian momentum components of the four momenta used in this experiment by,
 
 \begin{equation}
   \label{eq:pseudorapidity}
-  \eta = \sinh^{-1} \frac{p_z}{p_T}
+  \eta = \sinh^{-1} \frac{p_z}{p_T}.
 \end{equation}
+
+The rapidity is given by,
+
+\begin{equation}
+  \label{eq:rapidity}
+  y = \frac{1}{2}\ln{\left(\frac{E + p_z}{E - p_z}\right)},
+\end{equation}
+
+which in our case is equal to the pseudorapidity, as we are measuring photons which have zero rest mass, hence $E = |\mathbf{p}|$.
 
 The azimuthal angle is the angle subtended by the $x$ and $y$ momentum components, so the angle between the momentum components that are perpendicular to the beam axis, in contrast to the pseudorapidity, which is between the particle trajectory and the beam axis, (MAKE SENSE?) (DIAGRAM?)
 
 \begin{equation}
   \label{eq:azimuthal}
-  \phi = \tan^{-1} \frac{p_y}{p_x}
+  \phi = \tan^{-1} \frac{p_y}{p_x}.
 \end{equation}
 
-A lorentz invariant quantity measure of angular seperation which is a combination of pseudorapidity and azimuthal angle can also be defined, (GET SOURCE)
+A lorentz invariant quantity measure of angular seperation which is a combination of pseudorapidity and azimuthal angle can also be defined,
 
 \begin{equation}
   \label{eq:angular}
-  {(\Delta R)}^2 = {(\Delta \eta)}^2 + {(\Delta \phi)}^2
+  {(\Delta R)}^2 = {(\Delta \eta)}^2 + {(\Delta \phi)}^2.
 \end{equation}
 
-(WHY IS THIS LORENTZ INVARIANT?)
+The quantity $\Delta R$ is Lorentz invariant because both the difference in pseudorapidity $\Delta \eta$ and difference in azimuthal angle $\Delta \phi$ are Lorentz invariant. \cite{lorentz}
 
 \subsection{Branching Fraction}
 \label{sec:branching}
@@ -145,8 +169,9 @@ This scripts optimises the filters used on the Higgs and background data by usin
 The plotting script generates the histogram of both the higgs and background event data together, called the combined mass histogram. The significance in the mass range (WHAT MASS RANGE) is calculated by counting the number of Higgs events in the mass range and the number of background events in the mass range and then using eq.~\ref{eq:significance} to calculate the statistical significance. The script can also generate an invariant mass plot from the combined mass histogram.
 
 \subsection{Testing}
+\label{sec:testing}
 
-Python's unit testing framework, unittest, was used to run testing scripts on the filters to ensure that they were working as intended. The tests took a pre-generated dataset and then ran this against each filter, checking the result to see if it is what was expected. This allowed us to debug a major issue in the second transverse momenta filter, which was generating large numbers of duplicate invariant masses, causing large spikes in the invariant mass histogram. This was caused by a missing break statement which the testing revealed, causing the same event to be added to the output list multiple times.
+Python's unit testing framework, unittest, was used to run testing scripts on the filters to ensure that they were working as intended. The tests took a pre-generated dataset and then ran this against each filter, checking the result to see if it is what was expected. This allowed us to debug a major issue in the second transverse momenta filter, which was generating large numbers of duplicate invariant masses, causing repeated values in the invariant mass histogram.
 
 \section{Weighting}
 
@@ -159,8 +184,7 @@ The data given included $10,000$ signal events and $1,000,000$ background events
 
 where $\text{num. H}$ is the number of signal events, $\text{num. back}$ is the number of background events, $\sigma{\left(\text{H prod}\right)}$ is the Higgs production cross section, $\sigma{\left(\text{back}\right)}$ is the background cross section, and $B_f\left(H\to\gamma\gamma\right)$ is the branching fraction of Higgs to diphoton.
 
-The branching fraction is given by $B_f\left(H\to\gamma\gamma\right) = 0.0023$, and the cross sections are given by $\sigma{\left(\text{H prod}\right)} = \SI{17.12}{\pico\barn}$, and $\sigma{\left(\text{back}\right)} = \SI{140}{\pico\barn}$. The Higgs cross section and branching fraction are taken at roughly the expected Higgs mass $\SI{125}{\giga\electronvolt}$, \cite{Higgs} where the cross section is taken from the ABPS calculation for $\sqrt{s} = \SI{14}{\tera\electronvolt}$ where $s$ is the center-of-momentum energy (the energy in the frame where the net momenta is zero). \cite{HiggsCross1} (MORE JUSTIFICATION NEEDED). The background cross section is taken from the PYTHIA collision event generator.
-
+The branching fraction is given by $B_f\left(H\to\gamma\gamma\right) = 0.0023$, and the cross sections are given by $\sigma{\left(\text{H prod}\right)} = \SI{17.12}{\pico\barn}$, and $\sigma{\left(\text{back}\right)} = \SI{140}{\pico\barn}$. The Higgs cross section and branching fraction are taken at roughly the expected Higgs mass $\SI{125}{\giga\electronvolt}$, \cite{Higgs} where the cross section is taken from the ABPS calculation for $\sqrt{s} = \SI{14}{\tera\electronvolt}$ where $s$ is the centre-of-momentum energy (the energy in the frame where the total momenta is zero). \cite{HiggsCross1} \cite{COMframe} (MORE JUSTIFICATION NEEDED). The background cross section is taken from the PYTHIA collision event generator.
 
 \section{Filters}
 \label{sec:filters}
@@ -221,7 +245,25 @@ The numpy library is used to generate an combined (signal and background) invari
 
 (DISCUSS RESULTS!!!)
 
+(TALK ABOUT HISTOGRAM RESOLUTION)
+
 \section{Results}
+
+\section{Issues}
+
+There were a few issues encountered upon the way. Some were expected but a couple were not, and were harder to fix.
+
+The clearest and most pressing issue was having to filter, since the Higgs was practically invisible in the unfiltered invariant mass plot (having a statistical significance of only $\Sigma = 0.01264$). Filters were written to attempt to remove the non-Higgs events from the dataset as discussed in section ~\ref{sec:filters}. Then the most optimum parameters had to be found that would give us the best ratio of signal to background events, as discussed in section ~\ref{sec:optimisation}.
+
+When the invariant mass histogram was generated after finding some preliminary optimised parameters, invariant masses were being repeated. This was revealed by testing as discussed in section ~\ref{sec:testing}, and was due to a missing break statement. These events were being added multiple times in the second transverse momenta and second energy filters (section ~\ref{sec:filters}). The filter would iterate over each four momenta in an event, and if the transverse momentum/energy of the four momentum was greater than the threshold, that event would be added to the list of events to return from the filter. The missing break statement meant that even if a transverse momentum/energy above the threshold was found, the filter would continue to iterate through the event, repeatedly adding the same event to the output list. This was noticed when looking at the invariant mass histogram, there would be some bins that were much taller than adjacent ones, instead of a roughly homogenous distribution. This was due to those bins containing events with \textit{many} four momenta over the transverse momenta/energy threshold, so those events would be added to the invariant mass histogram many more times. This was all fixed by adding a single break statement after a four momentum above the threshold was found, preventing the repeated adding.
+
+Another issue, while not as urgent, was that the parsing script took a very long time to parse all the data. This was due to the entire remainder of the data file being passed to the parsing function every time an event was found, as the file would parse each line as a four momentum until it found another ``Event n'' heading. To fix this a file was created alongside the event data files containing the number of four momenta in each event. This meant that only the number of lines needed were passed to the event parser, instead of all the lines being passed, so instead of having to pass almost a million lines, only around ten lines would need to be passed for each event, which was significantly faster. Without this the parsing script would take many hours to run. Parallel processing was also used for a small performance gain. (EXPLAIN?)
+
+\section{Acknowledgments}
+
+\section{Conclusion}
+
+
 
 \end{multicols}
 
