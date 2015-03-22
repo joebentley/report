@@ -6,6 +6,7 @@
 \usepackage{hyperref}
 \usepackage{fancyhdr}
 \usepackage{multicol, caption}
+\usepackage[font=small,labelfont=bf]{caption}
 \newenvironment{Figure}
   {\par\medskip\noindent\minipage{\linewidth}}
   {\endminipage\par\medskip}
@@ -44,6 +45,10 @@
 
 \begin{multicols}{2}
 
+\section{Introduction}
+
+In this experiment particle collision data is analysed using multiple Python scripts to generate an invariant mass histogram and attempt to find the Higgs boson with some statistical significance. (WHAT STATISTICAL SIGNIFICANCE) The data is generated in PYTHIA as a flat text file, which is parsed by our parsing script to filter the events and calculate the invariant masses.
+
 \section{Theory}
 
 \subsection{Four Momentum}
@@ -72,9 +77,23 @@ The azimuthal angle is the angle subtended by the $x$ and $y$ momentum component
   \phi = \tan^{-1} \frac{p_y}{p_x}
 \end{equation}
 
+A lorentz invariant quantity measure of angular seperation which is a combination of pseudorapidity and azimuthal angle can also be defined, (GET SOURCE)
+
+\begin{equation}
+  \label{eq:angular}
+  {(\Delta R)}^2 = {(\Delta \eta)}^2 + {(\Delta \phi)}^2
+\end{equation}
+
+(WHY IS THIS LORENTZ INVARIANT?)
+
+\subsection{Branching Fraction}
+\label{sec:branching}
+
+The branching fraction is the fraction of all particles which decay through a given decay mode, in this case the fraction of $H \to \gamma\gamma$ decays over all Higgs decay modes. For example, if the branching fraction for a given decay mode is $0.5$, then on average half of the particles will decay through that mode.
+
 \subsection{Higgs Decay Channels}
 
-The Higgs can decay through a few different modes:
+Since the Higgs is a very massive particle, it can decay through a large number of different decay modes: (GET SOURCE)
 
 \begin{itemize}
     \item Fermion-antifermion pair
@@ -86,7 +105,7 @@ The Higgs can decay through a few different modes:
 
 (MAYBE A BIT MORE EXPLANATION ABOUT THESE DECAY MODES?! (GET ANOTHER SOURCE?!)
 
-The decay channel investigated in this experiment is the last one, the decay of the Higgs into two photons by a heavy virtual quark (top) or massive gauge boson (W boson) loop. This is significantly rarer than the other decay modes as seen in the small branching fraction of $0.0023$ (so it occurs twice in every thousand decays) \cite{HiggsCross1}, but is used because the momenta of the photons can be measured much more accurately than other more massive particles, since the momenta of the photon is directly proportional to its energy, as the photon has no rest mass. (GET SOURCE) (HOW TO MEASURE PARTICLE MOMENTUM? LOOK AT ATLAS EXPERIMENT)
+The decay channel investigated in this experiment is the last one, the decay of the Higgs into two photons by a heavy virtual quark (top) or massive gauge boson (W boson) loop. This is significantly rarer than the other decay modes as seen in the small branching fraction of 0.0023 (so it occurs twice in every thousand decays) \cite{HiggsCross1}, but is used because the momenta of the photons can be measured much more accurately than other more massive particles, since the momenta of the photon is directly proportional to its energy, as the photon has no rest mass. (GET SOURCE) (HOW TO MEASURE PARTICLE MOMENTUM? LOOK AT ATLAS EXPERIMENT)
 
 \subsection{Invariant Mass}
 \label{sec:invariant}
@@ -115,7 +134,7 @@ The scripts used in this experiment were written in Python 3, and used the numpy
 
 \subsection{parse.py}
 
-The script parse.py parses the event data in the format described in section ~\ref{sec:pythia} into individual event objects which each contain a list of four momenta objects. In these event classes we have methods which do useful operations like calculating the invariant mass of the event using the four momenta. The four momenta class has methods that allow us to easily calculate the transverse momentum, azimuthal angle, and pseudorapidity, as well as allowing us to add and take the dot product of four momenta. The parsing scripts also contains the filters which are used to filter out Higgs events from background events, and are discussed in more depth in section ~\ref{sec:filters}. The invariant masses are calculated for each event in the event data file and then each invariant mass is written to a line in the output invariant masses file.
+The script parse.py parses the event data in the format described in section ~\ref{sec:pythia} into individual event objects which each contain a list of four momenta objects. In these event classes we have methods which do useful operations like calculating the invariant mass of the event using the four momenta. The four momenta class has methods that allow us to easily calculate the transverse momentum, azimuthal angle, and pseudorapidity, as well as allowing us to add and take the dot product of four momenta. The parsing scripts also contains the filters which are used to filter out Higgs events from background events, and are discussed in more depth in section ~\ref{sec:filters}. The invariant masses are calculated for each event in the event data file, and then the resulting list of invariant masses is saved using python's built-in pickle module, which saves python objects in a binary representation, saving space and improving read and write times of the invariant masses.
 
 \subsection{significance.py}
 
@@ -125,9 +144,13 @@ This scripts optimises the filters used on the Higgs and background data by usin
 
 The plotting script generates the histogram of both the higgs and background event data together, called the combined mass histogram. The significance in the mass range (WHAT MASS RANGE) is calculated by counting the number of Higgs events in the mass range and the number of background events in the mass range and then using eq.~\ref{eq:significance} to calculate the statistical significance. The script can also generate an invariant mass plot from the combined mass histogram.
 
+\subsection{Testing}
+
+Python's unit testing framework, unittest, was used to run testing scripts on the filters to ensure that they were working as intended. The tests took a pre-generated dataset and then ran this against each filter, checking the result to see if it is what was expected. This allowed us to debug a major issue in the second transverse momenta filter, which was generating large numbers of duplicate invariant masses, causing large spikes in the invariant mass histogram. This was caused by a missing break statement which the testing revealed, causing the same event to be added to the output list multiple times.
+
 \section{Weighting}
 
-The data given included $10,000$ signal events and $1,000,000$ background events. This is a much smaller ratio of signal to background events than would actually be observed in a real collider experiment, due to the low branching fraction of the $H \to \gamma\gamma$. The branching fraction is the fraction of all particles which decay through a given decay mode, in this case the fraction of $H \to \gamma\gamma$ decays over all Higgs decay modes. The theoretical ratio of the observed Higgs events to observed background events can be calculated by taking the ratio of the Higgs production cross section to the background cross section and multiplying it by the branching fraction of $H \to \gamma\gamma$,
+The data given included $10,000$ signal events and $1,000,000$ background events. This is a much smaller ratio of signal to background events than would actually be observed in a real collider experiment, due to the low branching fraction of the $H \to \gamma\gamma$. The theoretical ratio of the observed Higgs events to observed background events can be calculated by taking the ratio of the Higgs production cross section to the background cross section and multiplying it by the branching fraction of $H \to \gamma\gamma$,
 
 \begin{equation}
   \label{eq:weighting}
@@ -146,21 +169,21 @@ There are many more background events than there are from the signal (Higgs) eve
 
 \subsection{Number}
 
-The first filter applied a threshold to the number of four momenta in the collision event. It is required that the event must have at least two four momenta, as the $H \to \gamma\gamma$ will produce at least two photons, not just one.
+The first filter applied a threshold to the number of four momenta in the collision event. It is required that the event must have at least two four momenta, as the $H \to \gamma\gamma$ will produce at least two photons, not just one. This filter should have a good effect to clean up a large amount of data which is definitely background, as we know that all events with one four momenta must be background.
 
 \subsection{Transverse Momenta}
 
-The transverse momenta is the component of the momentum perpendicular to the beam axis as described in section ~\ref{sec:fourmomentum}. This is filtered in two passes over both the signal and higgs events. Given an event with four momenta, first the event is discarded unless it has at least one four momentum above a given threshold, then all four momenta in the event below a certain threshold are discarded.
+The transverse momenta is the component of the momentum perpendicular to the beam axis as described in section ~\ref{sec:fourmomentum}. The filter is applied in two passes over both the signal and background events. First the given event is discarded \textit{unless} it has at least one four momentum with a transverse momentum above a given threshold, denoted $p_1$. Then all four momenta in the event with tranverse momenta below a given threshold, denoted $p_2$, are removed from the event.
 
 (JUSTIFICATION)
 
 \subsection{Energy}
 
-(Filter the energy, not sure if we will see results)
+The energy of the four momenta is filtered similarly to how the transverse momenta is filtered. First the event is discarded \textit{unless} it has at least one four momenta with an energy greater than a given threshold, denoted $E_1$. Then all four momenta with an energy less than a given threshold, denoted $E_2$, are removed from the event.
 
 \subsection{Angular}
 
-(Filter the difference in azimuthal angle and pseudorapidity squared)
+The square of the difference in azimuthal angle and square of the difference in pseudorapidity are also filtered by finding the maximum difference squared in both the azimuthal and pseudorapidity for all the four momenta in an event. If the maximum difference squared of a given event is below a given threshold, for azimuthal denoted ${(\Delta \phi)}^2$ and for pseudorapidity denoted ${(\Delta \eta)}^2$, then that event is discarded.
 
 \subsection{Final Selection}
 
@@ -170,17 +193,20 @@ There are two methods that were proposed to choose the final two transverse mome
 \section{Optimisation of Filters}
 \label{sec:optimisation}
 
-To find the filter parameters that give the best chance of finding the Higgs we used the formula for the statistical significance of the higgs,
+The filters available can be used to attempt to isolate the Higgs signal from the background signal to increase the Higgs statistical significance in the mass window. Without optimising the filter parameters the best parameters to choose are unknown, and so it is just guessing to choose any. By optimising the filters the best possible values are attained. The filter parameters ``goodness'' were measured using the statistical significance equation,
 
 \begin{equation}
   \label{eq:significance}
   \Sigma = \frac{\text{no. signal}}{\sqrt{\text{no. signal} + \text{no. background}}}
 \end{equation}
 
-Each filter is applied to the signal (Higgs) and background events and then the above equation is used to find the statistical significance of the Higgs in those events by counting the number of signal and background events left after filtering. To find the best parameters to use for the filters a range of different parameters are tested for each filter. For example for the transverse momenta filter, the threshold is originally applied from $\SI{0}{\giga\electronvolt}$ to $\SI{700}{\giga\electronvolt}$ in steps of $\SI{100}{\giga\electronvolt}$. The value that gives the best statistical significance is then chosen as the current candidate for the best optimised value. Then the value is further optimised by taking the currently best optimised value and then calculating the statistical significance for the values around it, for example checking the statistical significance at $\SI{\pm10}{\giga\electronvolt}$ the current value for the above example. After repeating this process a few times (HOW MANY TIMES?) the most optimum filter values to see the most Higgs event in the invariant mass histogram are found.
+Each filter is applied to the signal (Higgs) and background events and then the above equation is used to find the statistical significance of the Higgs in those events by counting the number of signal and background events left after filtering. The filter parameters giving a higher statistical significance correspond to having a higher ratio of signal events to background events, so this gives a better significance of the Higgs in the invariant mass histogram.
+
+To find the best parameters to use for the filters a range of different parameters are tested for each filter. For example for the transverse momenta filter, the threshold is originally applied from $\SI{0}{\giga\electronvolt}$ to $\SI{700}{\giga\electronvolt}$ in steps of $\SI{100}{\giga\electronvolt}$. The value that gives the best statistical significance is then chosen as the current candidate for the best optimised value. Then the value is further optimised by taking the currently best optimised value and then calculating the statistical significance for the values around it, for example checking the statistical significance at $\SI{\pm10}{\giga\electronvolt}$ the current value for the above example. After repeating this process a few times (HOW MANY TIMES?) the most optimum filter values to see the most Higgs event in the invariant mass histogram are found.
 
 INCLUDE SIGNIFICANCE PLOT!!!
 
+After running repeated optimisations over the mass range \SI{0}{\giga\electronvolt} to \SI{700}{\giga\electronvolt}, the optimum cut values were found to be $p_1 = \SI{70}{\giga\electronvolt}$ and $p_2 = \SI{90}{\giga\electronvolt}$.
 
 \section{Invariant Mass Histogram}
 
@@ -188,8 +214,8 @@ The numpy library is used to generate an combined (signal and background) invari
 
 \begin{Figure}
   \centering
-  \includegraphics[width=\linewidth]{invmass}
-  \captionof{figure}{Our awesome invariant mass plot yo!}
+  \includegraphics[width=\linewidth]{invmass2}
+  \captionof{figure}{Combined invariant mass plot in the mass range \SI{50}{\giga\electronvolt} to \SI{200}{\giga\electronvolt} with optimised filter parameters applied. In the mass range the Higgs had a significance of $\Sigma = 0.33295$}
   \label{fig:invmass}
 \end{Figure}
 
