@@ -7,17 +7,17 @@
 \usepackage{fancyhdr}
 \usepackage{multicol, caption}
 \usepackage[font=small,labelfont=bf]{caption}
-\newenvironment{Figure}
-  {\par\medskip\noindent\minipage{\linewidth}}
-  {\endminipage\par\medskip}
 
 \graphicspath{ {./images/} }
 
-%\makeatletter
+\makeatletter
 %\def\subsection{\@startsection{subsection}{3}%
 %  \z@{.5\linespacing\@plus.7\linespacing}{.1\linespacing}%
 %  {\normalfont\itshape}}
-%\makeatother
+\newenvironment{figurehere}
+  {\def\@captype{figure}}
+  {}
+\makeatother
 
 \title{Observation of the Higgs Boson in the $H \to \gamma\gamma$ Channel from Data Simulated in Pythia}
 
@@ -69,7 +69,7 @@ The transverse momentum is the component of the momentum perpendicular to the be
   p_T = \sqrt{{p_x}^2 + {p_y}^2}.
 \end{equation}
 
-The pseudorapidity is a measure of the angle between the particle and the beam axis, and is defined as,
+The pseudorapidity is a measure of the polar angle $\theta$, the angle between the particle and the beam axis, and is defined as,
 
 \begin{equation}
   \label{eq:pseudorapdity2}
@@ -94,7 +94,7 @@ The rapidity is given by,
 
 which in our case is equal to the pseudorapidity, as we are measuring photons which have zero rest mass, hence $E = |\mathbf{p}|$.
 
-The azimuthal angle is the angle subtended by the $x$ and $y$ momentum components, so the angle between the momentum components that are perpendicular to the beam axis, in contrast to the pseudorapidity, which is between the particle trajectory and the beam axis, (MAKE SENSE?) (DIAGRAM?)
+The azimuthal angle is the angle between the momentum and the $x$-component as seen in the $xy$-plane, in contrast to the pseudorapidity, which is between the particle trajectory and the beam axis (see fig.~\ref{fig:kinematics}),
 
 \begin{equation}
   \label{eq:azimuthal}
@@ -109,6 +109,13 @@ A lorentz invariant quantity measure of angular seperation which is a combinatio
 \end{equation}
 
 The quantity $\Delta R$ is Lorentz invariant because both the difference in pseudorapidity $\Delta \eta$ and difference in azimuthal angle $\Delta \phi$ are Lorentz invariant. \cite{lorentz}
+
+\begin{figurehere}
+  \centering
+  \includegraphics[width=\linewidth]{kinematics}
+  \captionof{figure}{A diagram showing the transverse momenta $p_T$, the azimuthal angle $\phi$, and the polar angle $\theta$ in the case where the beam axis is aligned with the $z$-axis}
+  \label{fig:kinematics}
+\end{figurehere}
 
 \subsection{Branching Fraction}
 \label{sec:branching}
@@ -228,20 +235,25 @@ Each filter is applied to the signal (Higgs) and background events and then the 
 
 To find the best parameters to use for the filters a range of different parameters are tested for each filter. For example for the transverse momenta filter, the threshold is originally applied from $\SI{0}{\giga\electronvolt}$ to $\SI{700}{\giga\electronvolt}$ in steps of $\SI{100}{\giga\electronvolt}$. The value that gives the best statistical significance is then chosen as the current candidate for the best optimised value. Then the value is further optimised by taking the currently best optimised value and then calculating the statistical significance for the values around it, for example checking the statistical significance at $\SI{\pm10}{\giga\electronvolt}$ the current value for the above example. After repeating this process a few times (HOW MANY TIMES?) the most optimum filter values to see the most Higgs event in the invariant mass histogram are found.
 
-INCLUDE SIGNIFICANCE PLOT!!!
+\begin{figurehere}
+  \centering
+  \includegraphics[width=\linewidth]{energy}
+  \captionof{figure}{Optimisation plot for the energy, showing the best (highest) values of $E_1 = \SI{40}{\giga\electronvolt}$ and $E_2 = \SI{60}{\giga\electronvolt}$}
+  \label{fig:energy}
+\end{figurehere}
 
-After running repeated optimisations over the mass range \SI{0}{\giga\electronvolt} to \SI{700}{\giga\electronvolt}, the optimum cut values were found to be $p_1 = \SI{70}{\giga\electronvolt}$ and $p_2 = \SI{90}{\giga\electronvolt}$.
+After running repeated optimisations over the mass range \SI{0}{\giga\electronvolt} to \SI{700}{\giga\electronvolt}, the optimum cut values for transverse momenta were found to be $p_1 = \SI{70}{\giga\electronvolt}$ and $p_2 = \SI{90}{\giga\electronvolt}$, and for energy were found to be $E_1 = \SI{40}{\giga\electronvolt}$ and $E_2 = \SI{60}{\giga\electronvolt}$.
 
 \section{Invariant Mass Histogram}
 
 The numpy library is used to generate an combined (signal and background) invariant mass histogram from the invariant masses calculated in the parsing script. The statistical significance of the signal (Higgs) is calculated using eq.~\ref{eq:significance} over the mass window discussed in section ~\ref{sec:invariant}, and gives a measure of how sure we can be that it is the Higgs in this mass range.
 
-\begin{Figure}
+\begin{figurehere}
   \centering
   \includegraphics[width=\linewidth]{invmass2}
-  \captionof{figure}{Combined invariant mass plot in the mass range \SI{50}{\giga\electronvolt} to \SI{200}{\giga\electronvolt} with optimised filter parameters applied. In the mass range the Higgs had a significance of $\Sigma = 0.33295$}
+  \caption{Combined invariant mass plot in the mass range \SI{50}{\giga\electronvolt} to \SI{200}{\giga\electronvolt} with optimised filter parameters applied. In the mass range the Higgs had a significance of $\Sigma = 0.33295$}
   \label{fig:invmass}
-\end{Figure}
+\end{figurehere}
 
 (DISCUSS RESULTS!!!)
 
@@ -257,12 +269,13 @@ The clearest and most pressing issue was having to filter, since the Higgs was p
 
 When the invariant mass histogram was generated after finding some preliminary optimised parameters, invariant masses were being repeated. This was revealed by testing as discussed in section ~\ref{sec:testing}, and was due to a missing break statement. These events were being added multiple times in the second transverse momenta and second energy filters (section ~\ref{sec:filters}). The filter would iterate over each four momenta in an event, and if the transverse momentum/energy of the four momentum was greater than the threshold, that event would be added to the list of events to return from the filter. The missing break statement meant that even if a transverse momentum/energy above the threshold was found, the filter would continue to iterate through the event, repeatedly adding the same event to the output list. This was noticed when looking at the invariant mass histogram, there would be some bins that were much taller than adjacent ones, instead of a roughly homogenous distribution. This was due to those bins containing events with \textit{many} four momenta over the transverse momenta/energy threshold, so those events would be added to the invariant mass histogram many more times. This was all fixed by adding a single break statement after a four momentum above the threshold was found, preventing the repeated adding.
 
-Another issue, while not as urgent, was that the parsing script took a very long time to parse all the data. This was due to the entire remainder of the data file being passed to the parsing function every time an event was found, as the file would parse each line as a four momentum until it found another ``Event n'' heading. To fix this a file was created alongside the event data files containing the number of four momenta in each event. This meant that only the number of lines needed were passed to the event parser, instead of all the lines being passed, so instead of having to pass almost a million lines, only around ten lines would need to be passed for each event, which was significantly faster. Without this the parsing script would take many hours to run. Parallel processing was also used for a small performance gain. (EXPLAIN?)
-
-\section{Acknowledgments}
+Another issue, while not as urgent, was that the parsing script took a very long time to parse all the data. This was due to the entire remainder of the data file being passed to the parsing function every time an event was found, as the file would parse each line as a four momentum until it found another ``Event n'' heading. To fix this a file was created alongside the event data files containing the number of four momenta in each event. This meant that only the number of lines needed were passed to the event parser, instead of all the lines being passed, so instead of having to pass almost a million lines, only around ten lines would need to be passed for each event, which was significantly faster. Without this the parsing script would take many hours to run. Parallel processing from Python's multiprocessing library was also used for a small performance gain. (EXPLAIN?)
 
 \section{Conclusion}
 
+\section{Acknowledgments}
+
+Thank you to my lab partner Jake, who did a lot of work on the statistical significance, and was very knowledgable about the topic of the experiment. Thanks to our supervisor Timothy Williams as well for being extremely helpful in any questions we had, as well as pushing us in the right directions. Special thanks to the PYTHIA team for creating great open-source software, and finally to everyone at CERN for making this possible in the first place, as well as doing great things for our understanding of the universe.
 
 
 \end{multicols}
