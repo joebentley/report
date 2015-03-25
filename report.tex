@@ -10,14 +10,16 @@
 
 \graphicspath{ {./images/} }
 
-\makeatletter
+\setlength{\headheight}{11pt}
+
+%\makeatletter
 %\def\subsection{\@startsection{subsection}{3}%
 %  \z@{.5\linespacing\@plus.7\linespacing}{.1\linespacing}%
 %  {\normalfont\itshape}}
-\newenvironment{figurehere}
-  {\def\@captype{figure}}
-  {}
-\makeatother
+\newenvironment{Figure}
+  {\par\medskip\noindent\minipage{\linewidth}}
+  {\endminipage\par\medskip}
+%\makeatother
 
 \title{Observation of the Higgs Boson in the $H \to \gamma\gamma$ Channel from Data Simulated in Pythia}
 
@@ -110,12 +112,12 @@ A lorentz invariant quantity measure of angular seperation which is a combinatio
 
 The quantity $\Delta R$ is Lorentz invariant because both the difference in pseudorapidity $\Delta \eta$ and difference in azimuthal angle $\Delta \phi$ are Lorentz invariant. \cite{lorentz}
 
-\begin{figurehere}
+\begin{Figure}
   \centering
   \includegraphics[width=\linewidth]{kinematics}
   \captionof{figure}{A diagram showing the transverse momenta $p_T$, the azimuthal angle $\phi$, and the polar angle $\theta$ in the case where the beam axis is aligned with the $z$-axis}
   \label{fig:kinematics}
-\end{figurehere}
+\end{Figure}
 
 \subsection{Branching Fraction}
 \label{sec:branching}
@@ -169,7 +171,7 @@ The script parse.py parses the event data in the format described in section ~\r
 
 \subsection{significance.py}
 
-This scripts optimises the filters used on the Higgs and background data by using a series of parameters with the filters and testing them on the entire data set; the significance is taken for the parameters and this is used to find the best filter parameters, as discussed in section ~\ref{sec:optimisation}. This script parses and filters the data using the parsing module.
+This script optimises the filters used on the Higgs and background data by using a series of parameters with the filters and testing them on the entire data set; the significance is taken for the parameters and this is used to find the best filter parameters, as discussed in section ~\ref{sec:optimisation}. It parses and filters the data using the parsing module.
 
 \subsection{plot.py}
 
@@ -191,7 +193,7 @@ The data given included $10,000$ signal events and $1,000,000$ background events
 
 where $\text{num. H}$ is the number of signal events, $\text{num. back}$ is the number of background events, $\sigma{\left(\text{H prod}\right)}$ is the Higgs production cross section, $\sigma{\left(\text{back}\right)}$ is the background cross section, and $B_f\left(H\to\gamma\gamma\right)$ is the branching fraction of Higgs to diphoton.
 
-The branching fraction is given by $B_f\left(H\to\gamma\gamma\right) = 0.0023$, and the cross sections are given by $\sigma{\left(\text{H prod}\right)} = \SI{17.12}{\pico\barn}$, and $\sigma{\left(\text{back}\right)} = \SI{140}{\pico\barn}$. The Higgs cross section and branching fraction are taken at roughly the expected Higgs mass $\SI{125}{\giga\electronvolt}$, \cite{Higgs} where the cross section is taken from the ABPS calculation for $\sqrt{s} = \SI{14}{\tera\electronvolt}$ where $s$ is the centre-of-momentum energy (the energy in the frame where the total momenta is zero). \cite{HiggsCross1} \cite{COMframe} (MORE JUSTIFICATION NEEDED). The background cross section is taken from the PYTHIA collision event generator.
+The branching fraction for Higgs to two photons is given by $B_f\left(H\to\gamma\gamma\right) = 0.0023$, and the cross sections are given by $\sigma{\left(\text{H prod}\right)} = \SI{17.12}{\pico\barn}$, and $\sigma{\left(\text{back}\right)} = \SI{140}{\pico\barn}$. The Higgs cross section and branching fraction are taken at roughly the expected Higgs mass $\SI{125}{\giga\electronvolt}$, \cite{Higgs} where the cross section is taken from the ABPS calculation for $\sqrt{s} = \SI{14}{\tera\electronvolt}$ where $s$ is the centre-of-momentum energy (the energy in the frame where the total momenta is zero). \cite{HiggsCross1} \cite{COMframe} (MORE JUSTIFICATION NEEDED). The background cross section is taken from the PYTHIA collision event generator.
 
 \section{Filters}
 \label{sec:filters}
@@ -224,6 +226,13 @@ There are two methods that were proposed to choose the final two transverse mome
 \section{Optimisation of Filters}
 \label{sec:optimisation}
 
+\begin{Figure}
+  \centering
+  \includegraphics[width=\linewidth]{energy}
+  \captionof{figure}{Optimisation plot for the energy, showing the best (highest) values of $E_1 = \SI{40}{\giga\electronvolt}$ and $E_2 = \SI{60}{\giga\electronvolt}$}
+  \label{fig:energy}
+\end{Figure}
+
 The filters available can be used to attempt to isolate the Higgs signal from the background signal to increase the Higgs statistical significance in the mass window. Without optimising the filter parameters the best parameters to choose are unknown, and so it is just guessing to choose any. By optimising the filters the best possible values are attained. The filter parameters ``goodness'' were measured using the statistical significance equation,
 
 \begin{equation}
@@ -235,12 +244,6 @@ Each filter is applied to the signal (Higgs) and background events and then the 
 
 To find the best parameters to use for the filters a range of different parameters are tested for each filter. For example for the transverse momenta filter, the threshold is originally applied from $\SI{0}{\giga\electronvolt}$ to $\SI{700}{\giga\electronvolt}$ in steps of $\SI{100}{\giga\electronvolt}$. The value that gives the best statistical significance is then chosen as the current candidate for the best optimised value. Then the value is further optimised by taking the currently best optimised value and then calculating the statistical significance for the values around it, for example checking the statistical significance at $\SI{\pm10}{\giga\electronvolt}$ the current value for the above example. After repeating this process a few times (HOW MANY TIMES?) the most optimum filter values to see the most Higgs event in the invariant mass histogram are found.
 
-\begin{figurehere}
-  \centering
-  \includegraphics[width=\linewidth]{energy}
-  \captionof{figure}{Optimisation plot for the energy, showing the best (highest) values of $E_1 = \SI{40}{\giga\electronvolt}$ and $E_2 = \SI{60}{\giga\electronvolt}$}
-  \label{fig:energy}
-\end{figurehere}
 
 After running repeated optimisations over the mass range \SI{0}{\giga\electronvolt} to \SI{700}{\giga\electronvolt}, the optimum cut values for transverse momenta were found to be $p_1 = \SI{70}{\giga\electronvolt}$ and $p_2 = \SI{90}{\giga\electronvolt}$, and for energy were found to be $E_1 = \SI{40}{\giga\electronvolt}$ and $E_2 = \SI{60}{\giga\electronvolt}$.
 
@@ -248,12 +251,12 @@ After running repeated optimisations over the mass range \SI{0}{\giga\electronvo
 
 The numpy library is used to generate an combined (signal and background) invariant mass histogram from the invariant masses calculated in the parsing script. The statistical significance of the signal (Higgs) is calculated using eq.~\ref{eq:significance} over the mass window discussed in section ~\ref{sec:invariant}, and gives a measure of how sure we can be that it is the Higgs in this mass range.
 
-\begin{figurehere}
+\begin{Figure}
   \centering
   \includegraphics[width=\linewidth]{invmass2}
-  \caption{Combined invariant mass plot in the mass range \SI{50}{\giga\electronvolt} to \SI{200}{\giga\electronvolt} with optimised filter parameters applied. In the mass range the Higgs had a significance of $\Sigma = 0.33295$}
+  \captionof{figure}{Combined invariant mass plot in the mass range \SI{50}{\giga\electronvolt} to \SI{200}{\giga\electronvolt} with optimised filter parameters applied. In the mass range the Higgs had a significance of $\Sigma = 0.33295$}
   \label{fig:invmass}
-\end{figurehere}
+\end{Figure}
 
 (DISCUSS RESULTS!!!)
 
